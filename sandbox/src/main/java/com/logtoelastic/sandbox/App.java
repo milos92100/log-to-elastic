@@ -1,4 +1,4 @@
-package com.example.logtoelastic;
+package com.logtoelastic.sandbox;
 
 
 import org.apache.http.HttpHost;

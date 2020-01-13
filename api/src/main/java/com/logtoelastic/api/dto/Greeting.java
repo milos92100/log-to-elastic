@@ -1,4 +1,4 @@
-package com.logtoelastic.api.response;
+package com.logtoelastic.api.dto;
 
 public class Greeting {
     private final long id;

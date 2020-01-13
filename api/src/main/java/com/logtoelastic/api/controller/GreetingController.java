@@ -1,6 +1,6 @@
 package com.logtoelastic.api.controller;
 
-import com.logtoelastic.api.response.Greeting;
+import com.logtoelastic.api.dto.Greeting;
 import com.logtoelastic.api.service.GreetingService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,7 +1,6 @@
 package com.logtoelastic.api.service;
 
-import com.logtoelastic.api.controller.GreetingController;
-import com.logtoelastic.api.response.Greeting;
+import com.logtoelastic.api.dto.Greeting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;

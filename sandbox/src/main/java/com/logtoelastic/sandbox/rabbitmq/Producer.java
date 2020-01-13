@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BooleanSupplier;
 
-
 public class Producer {
 
     private static final Logger logger = LogManager.getLogger(Producer.class);
@@ -60,7 +59,6 @@ public class Producer {
                     String message = "message-" + i;
                     outstandingConfirms.put(channel.getNextPublishSeqNo(), message);
                     channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
-
                     //Thread.sleep(500L);
                 }
 
@@ -70,7 +68,6 @@ public class Producer {
 
                 long end = System.nanoTime();
                 System.out.format("Published %,d messages and handled confirms asynchronously in %,d ms%n", MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
-
             }
 
         } catch (Exception e) {

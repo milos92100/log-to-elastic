@@ -1,4 +1,4 @@
-package com.logtoelastic.sandbox;
+package com.logtoelastic.domain.authentication.sandbox;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

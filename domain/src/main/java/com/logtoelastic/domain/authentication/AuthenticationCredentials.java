@@ -1,4 +1,4 @@
-package com.logtoelastic.api.dto;
+package com.logtoelastic.domain.authentication;
 
 public class AuthenticationCredentials {
     private String username;

@@ -1,4 +1,4 @@
-package com.logtoelastic;
+package com.logtoelastic.domain.authentication;
 
 import static org.junit.Assert.assertTrue;
 

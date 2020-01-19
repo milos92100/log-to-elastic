@@ -1,6 +1,5 @@
 package com.logtoelastic.sandbox.rabbitmq;
 
-import com.logtoelastic.sandbox.logging.LoggingApp;
 import com.rabbitmq.client.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -25,7 +25,7 @@ public class AuthenticationController {
 
     @PostMapping("/authentication")
     public ApiResponse authenticate(@Valid @RequestBody AuthenticationRequest request) {
-        AuthenticationResult result = loginService.authenticate(
+        AuthenticationResult result = loginService.login(
                 new AuthenticationCredentials(request.getUsername(), request.getUsername())
         );
 

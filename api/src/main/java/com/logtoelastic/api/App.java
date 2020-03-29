@@ -1,44 +1,46 @@
 package com.logtoelastic.api;
 
 import com.logtoelastic.core.serviceregistry.Registry;
-import com.logtoelastic.core.serviceregistry.services.AuthenticationService;
-import com.rabbitmq.client.ConnectionFactory;
-import org.springframework.boot.SpringApplication;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
+
 import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.annotation.PreDestroy;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 public class App {
 
-    public static void main(String... args) throws IOException, TimeoutException {
-//        InputStream propertiesStream = Objects.requireNonNull(App.class.getClassLoader().getResourceAsStream("app.properties"));
-//
-//        Properties properties = new Properties();
-//        properties.load(propertiesStream);
+    private static final Logger logger = LogManager.getLogger(App.class);
 
-        ConfigurableApplicationContext ctx = new SpringApplicationBuilder(App.class) //
-                .web(WebApplicationType.SERVLET) //
-                .registerShutdownHook(true) //
-                .run(args);
+    public static void main(String... args) {
+        try {
+            InputStream propertiesStream = Objects.requireNonNull( //
+                    App.class.getClassLoader().getResourceAsStream("app.properties") //
+            );
 
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        factory.setUsername("admin");
-        factory.setPassword("admin");
+            Properties properties = new Properties();
+            properties.load(propertiesStream);
 
-        AuthenticationService service = Registry.createAuthenticationService(factory.newConnection());
-        ctx.getBeanFactory().registerSingleton("core.authenticationService", service);
+            var coreServiceFactory = Registry.createServiceFactory(properties);
+
+            ConfigurableApplicationContext ctx = new SpringApplicationBuilder(App.class) //
+                    .web(WebApplicationType.SERVLET) //
+                    .registerShutdownHook(true) //
+                    .run(args);
+
+            ctx.getBeanFactory().registerSingleton("core.serviceFactory", coreServiceFactory);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
 
     }
 

@@ -1,6 +1,6 @@
-<Configuration status="WARN" packages="com.logtoelastic.api">
+<Configuration status="WARN" packages="com.logtoelastic.authentication">
     <Properties>
-        <Property name="logPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%X{correlationId}] [%t] %-5level %logger{36} - %msg%n
+        <Property name="logPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%X{correlationId}] [%t] %-5level %logger{1} - %msg%n
         </Property>
     </Properties>
     <Appenders>
@@ -32,18 +32,11 @@
             </Policies>
         </RollingFile>
 
-<!--        <MyAppender name="MyAppender"/>-->
-
-<!--        <Async name="Async">-->
-<!--            <AppenderRef ref="MyAppender"/>-->
-<!--        </Async>-->
     </Appenders>
     <Loggers>
-        <Root level="INFO">
+        <Root level="trace">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
-            <AppenderRef ref="RollingFileJson"/>
-<!--            <AppenderRef ref="Async"/>-->
         </Root>
     </Loggers>
 </Configuration>

@@ -1,6 +1,5 @@
-package com.logtoelastic.sandbox.nats;
+package com.logtoelastic.sandbox.streamsparallelexample;
 
-import java.time.Instant;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;

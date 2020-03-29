@@ -2,6 +2,8 @@ package com.logtoelastic.domain.authentication;
 
 import com.logtoelastic.domain.User;
 
+import java.util.Arrays;
+
 public class AuthenticationResult {
     private User identity;
     private String accessToken;
@@ -23,5 +25,14 @@ public class AuthenticationResult {
 
     public String[] getRoles() {
         return roles;
+    }
+
+    @Override
+    public String toString() {
+        return "AuthenticationResult{" +
+                "identity=" + identity +
+                ", accessToken='" + accessToken + '\'' +
+                ", roles=" + Arrays.toString(roles) +
+                '}';
     }
 }

@@ -1,21 +1,16 @@
 package com.logtoelastic.sandbox.nats;
 
+import com.logtoelastic.core.serviceregistry.Registry;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
 import io.nats.client.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class Client {
 
     private static final Logger logger = LogManager.getLogger(Client.class);
 
-    public static void main(String[] args) throws IOException, InterruptedException, TimeoutException, ExecutionException {
+    public static void main(String[] args) throws Exception {
 
         var options = new Options.Builder()
                 .server("nats://localhost:4222")
@@ -24,12 +19,19 @@ public class Client {
                     logger.info("status: {}, {}", connection.getStatus(), events);
                 }).build();
 
-        Connection nc = Nats.connect(options);
 
-        Future<Message> replyFuture = nc.request("authenticate", "request-data".getBytes(StandardCharsets.UTF_8));
-        Message reply = replyFuture.get(5, TimeUnit.SECONDS);
+        var factory = Registry.createServiceFactory(Nats.connect(options));
+        var authClient = factory.createAuthenticationServiceClient();
 
-        logger.info("reply: {}", new String(reply.getData()));
+        int i = 0;
+        while (i < 50) {
+            final int x = i;
+            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
+            i++;
+        }
 
     }
 }

@@ -2,9 +2,9 @@ package com.logtoelastic.api.service.impl;
 
 
 import com.logtoelastic.api.service.LoginService;
-import com.logtoelastic.core.serviceregistry.services.AuthenticationService;
-import com.logtoelastic.domain.authentication.AuthenticationCredentials;
-import com.logtoelastic.domain.authentication.AuthenticationResult;
+import com.logtoelastic.core.serviceregistry.services.clients.AuthenticationServiceClient;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationResult;
 import org.elasticsearch.common.inject.Inject;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +18,11 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     @Lazy
-    AuthenticationService authenticationService;
+    AuthenticationServiceClient authenticationServiceClient;
 
     @Override
-    public AuthenticationResult login(AuthenticationCredentials credentials) throws Exception {
-        var result = authenticationService.authenticate(credentials);
+    public AuthenticationResult login(AuthenticationRequest credentials) throws Exception {
+        var result = authenticationServiceClient.authenticate(credentials);
         return result.get();
     }
 }

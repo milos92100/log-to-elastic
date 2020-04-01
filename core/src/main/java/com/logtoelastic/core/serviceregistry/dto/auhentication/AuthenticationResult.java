@@ -1,4 +1,4 @@
-package com.logtoelastic.domain.authentication;
+package com.logtoelastic.core.serviceregistry.dto.auhentication;
 
 import com.logtoelastic.domain.User;
 

@@ -1,5 +1,9 @@
 package com.logtoelastic.core.serviceregistry.services;
 
+import com.logtoelastic.core.serviceregistry.services.clients.AuthenticationServiceClient;
+import com.logtoelastic.core.serviceregistry.services.providers.AuthenticationServiceProvider;
+
 public interface ServiceFactory {
-    AuthenticationService createAuthenticationService();
+    AuthenticationServiceClient createAuthenticationServiceClient();
+    AuthenticationServiceProvider createAuthenticationServiceProvider();
 }

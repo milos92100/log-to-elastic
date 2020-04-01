@@ -1,30 +1,29 @@
 package com.logtoelastic.authentication;
 
-
-import com.google.gson.Gson;
+import com.logtoelastic.core.serviceregistry.Registry;
+import com.logtoelastic.core.serviceregistry.services.ServiceFactory;
+import com.logtoelastic.core.serviceregistry.services.providers.AuthenticationServiceProvider;
 import com.logtoelastic.domain.User;
-import com.logtoelastic.domain.authentication.AuthenticationResult;
-import io.nats.client.Connection;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationResult;
 import io.nats.client.Nats;
 import io.nats.client.Options;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class App {
     private static final Logger logger = LogManager.getLogger(App.class);
 
     public static void main(String[] args) {
-        Connection nc = null;
-        Gson gson = new Gson();
-        try {
+        ServiceFactory serviceFactory = null;
 
+        try {
             InputStream propertiesStream = Objects.requireNonNull( //
                     App.class.getClassLoader().getResourceAsStream("app.properties") //
             );
@@ -36,28 +35,36 @@ public class App {
 
             var options = new Options.Builder()
                     .server(connectionString)
-                    .connectionListener((connection, events) -> {
-                        logger.info("status: {}, {}", connection.getStatus(), events);
+                    .connectionListener((conn, events) -> {
+                        logger.info("status: {}, {}", conn.getStatus(), events);
                     }).build();
 
-            nc = Nats.connect(options);
-        } catch (InterruptedException | IOException e) {
+
+            serviceFactory = Registry.createServiceFactory(Nats.connect(options));
+            logger.info("Authentication started...");
+
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
             System.exit(1);
         }
 
-        nc.createDispatcher((msg) -> {
-            String request = new String(msg.getData(), StandardCharsets.UTF_8);
-            logger.info("request: {}", request);
+        AuthenticationServiceProvider serviceProvider = serviceFactory.createAuthenticationServiceProvider();
 
-            AuthenticationResult result = new AuthenticationResult(
-                    new User(UUID.randomUUID().toString(), "foo", "john", "smith"),
-                    "token-xxxx",
-                    new String[]{"USER", "SALES_ADMIN"}
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
+
+        serviceProvider.onAuthenticate(authenticationRequest -> {
+            logger.info("t-id: {}; onAuthenticate: request: {}", Thread.currentThread().getId(), authenticationRequest);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return new AuthenticationResult(
+                    new User(UUID.randomUUID().toString(), "foo", "Foo", "Bar"),
+                    UUID.randomUUID().toString(),
+                    new String[]{"USER"}
             );
-            var replyJson = gson.toJson(result);
+        }, executorService);
 
-            msg.getConnection().publish(msg.getReplyTo(), replyJson.getBytes(StandardCharsets.UTF_8));
-        }).subscribe("authenticate");
     }
 }

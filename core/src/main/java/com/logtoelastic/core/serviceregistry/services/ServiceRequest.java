@@ -1,4 +1,4 @@
-package com.logtoelastic.core.serviceregistry.services.impl;
+package com.logtoelastic.core.serviceregistry.services;
 
 public class ServiceRequest<A, R> {
     private String subject;

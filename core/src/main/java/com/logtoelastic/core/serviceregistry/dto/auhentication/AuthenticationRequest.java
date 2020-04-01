@@ -1,10 +1,10 @@
-package com.logtoelastic.domain.authentication;
+package com.logtoelastic.core.serviceregistry.dto.auhentication;
 
-public class AuthenticationCredentials {
+public class AuthenticationRequest {
     private String username;
     private String password;
 
-    public AuthenticationCredentials(String username, String password) {
+    public AuthenticationRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

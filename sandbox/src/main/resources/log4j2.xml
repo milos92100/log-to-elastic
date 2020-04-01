@@ -1,6 +1,8 @@
 <Configuration status="WARN" packages="com.logtoelastic.sandbox.logging">
     <Properties>
-        <Property name="logPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%X{correlationId}] [%t] %-5level %logger{36} - %msg%n</Property>
+        <Property name="logPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%X{correlationId}] [%t] %-5level %logger{36} -
+            %msg%n
+        </Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
@@ -12,7 +14,7 @@
                 <Pattern>${logPattern}</Pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="1 MB"/>
             </Policies>
         </RollingFile>
@@ -26,16 +28,17 @@
             </JsonLayout>
 
             <Policies>
-                <TimeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="1 MB"/>
             </Policies>
         </RollingFile>
 
-        <MyAppender name="MyAppender"/>
+        <ElasticAppender name="ElasticAppender" host="localhost" port="9200"/>
 
         <Async name="Async">
-            <AppenderRef ref="MyAppender"/>
+            <AppenderRef ref="ElasticAppender"/>
         </Async>
+
     </Appenders>
     <Loggers>
         <Root level="trace">

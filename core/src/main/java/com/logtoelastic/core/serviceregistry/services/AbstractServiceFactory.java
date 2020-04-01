@@ -1,11 +1,10 @@
-package com.logtoelastic.core.serviceregistry.services.impl;
+package com.logtoelastic.core.serviceregistry.services;
 
 import com.logtoelastic.core.serviceregistry.services.ServiceFactory;
 import io.nats.client.Connection;
 import io.nats.client.Nats;
 import io.nats.client.Options;
 
-import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -30,6 +29,14 @@ public abstract class AbstractServiceFactory implements ServiceFactory {
                 .build();
 
         connection = Nats.connect(options);
+    }
+
+    public AbstractServiceFactory(Connection connection) {
+        if (connection == null) {
+            throw new IllegalArgumentException("connection must not be null");
+        }
+
+        this.connection = connection;
     }
 
     public Connection getConnection() {

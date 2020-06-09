@@ -1,6 +1,10 @@
 package com.logtoelastic.authentication;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.logtoelastic.authentication.processor.AuthenticationProcessor;
 import com.logtoelastic.core.serviceregistry.Registry;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
 import com.logtoelastic.core.serviceregistry.services.ServiceFactory;
 import com.logtoelastic.core.serviceregistry.services.providers.AuthenticationServiceProvider;
 import com.logtoelastic.domain.User;
@@ -18,17 +22,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class App {
-    private static final Logger logger = LogManager.getLogger(App.class);
+    private static final Logger LOGGER = LogManager.getLogger(App.class);
 
     public static void main(String[] args) {
         ServiceFactory serviceFactory = null;
+        Properties properties = null;
 
         try {
-            InputStream propertiesStream = Objects.requireNonNull( //
+            var propertiesStream = Objects.requireNonNull( //
                     App.class.getClassLoader().getResourceAsStream("app.properties") //
             );
 
-            Properties properties = new Properties();
+            properties = new Properties();
             properties.load(propertiesStream);
 
             var connectionString = properties.getProperty("natsConnectionString");
@@ -36,35 +41,24 @@ public class App {
             var options = new Options.Builder()
                     .server(connectionString)
                     .connectionListener((conn, events) -> {
-                        logger.info("status: {}, {}", conn.getStatus(), events);
+                        LOGGER.info("status: {}, {}", conn.getStatus(), events);
                     }).build();
 
 
             serviceFactory = Registry.createServiceFactory(Nats.connect(options));
-            logger.info("Authentication started...");
+            LOGGER.info("Authentication server started...");
 
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             System.exit(1);
         }
 
-        AuthenticationServiceProvider serviceProvider = serviceFactory.createAuthenticationServiceProvider();
+        var serviceProvider = serviceFactory.createAuthenticationServiceProvider();
+        var executorService = Executors.newFixedThreadPool(20);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
+        var injector = Guice.createInjector(new Module(properties));
+        var processor = injector.getInstance(AuthenticationProcessor.class);
 
-        serviceProvider.onAuthenticate(authenticationRequest -> {
-            logger.info("t-id: {}; onAuthenticate: request: {}", Thread.currentThread().getId(), authenticationRequest);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return new AuthenticationResult(
-                    new User(UUID.randomUUID().toString(), "foo", "Foo", "Bar"),
-                    UUID.randomUUID().toString(),
-                    new String[]{"USER"}
-            );
-        }, executorService);
-
+        serviceProvider.onAuthenticate(processor::authenticate, executorService);
     }
 }

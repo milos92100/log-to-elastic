@@ -1,10 +1,9 @@
 package com.logtoelastic.core.serviceregistry.services.providers.impl;
 
-import com.logtoelastic.core.serviceregistry.services.AbstractAuthenticationService;
-import com.logtoelastic.core.serviceregistry.services.clients.impl.AuthenticationServiceClientImpl;
-import com.logtoelastic.core.serviceregistry.services.providers.AuthenticationServiceProvider;
-import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
 import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationResult;
+import com.logtoelastic.core.serviceregistry.services.AbstractAuthenticationService;
+import com.logtoelastic.core.serviceregistry.services.providers.AuthenticationServiceProvider;
 import io.nats.client.Connection;
 
 import java.util.concurrent.Executor;
@@ -16,12 +15,12 @@ public class AuthenticationServiceProviderImpl extends AbstractAuthenticationSer
     }
 
     @Override
-    public void onAuthenticate(Function<AuthenticationRequest, AuthenticationResult> handler) {
-        handleRequest(AuthenticationServiceClientImpl.Subjects.AUTHENTICATE.name(), AuthenticationRequest.class, handler);
+    public void onAuthenticate(Function<AuthenticationCredentials, AuthenticationResult> handler) {
+        handleRequest(Subjects.AUTHENTICATE.name(), AuthenticationCredentials.class, handler);
     }
 
     @Override
-    public void onAuthenticate(Function<AuthenticationRequest, AuthenticationResult> handler, Executor executor) {
-        handleRequest(AuthenticationServiceClientImpl.Subjects.AUTHENTICATE.name(), AuthenticationRequest.class, handler, executor);
+    public void onAuthenticate(Function<AuthenticationCredentials, AuthenticationResult> handler, Executor executor) {
+        handleRequest(Subjects.AUTHENTICATE.name(), AuthenticationCredentials.class, handler, executor);
     }
 }

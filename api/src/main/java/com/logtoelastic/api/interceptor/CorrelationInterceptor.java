@@ -2,6 +2,7 @@ package com.logtoelastic.api.interceptor;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ public class CorrelationInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
                              final Object handler) throws Exception {
         final String correlationId = getCorrelationIdFromHeader(request);
+        response.addHeader(CORRELATION_ID_HEADER_NAME, correlationId);
         ThreadContext.put(CORRELATION_ID_LOG_VAR_NAME, correlationId);
         return true;
     }

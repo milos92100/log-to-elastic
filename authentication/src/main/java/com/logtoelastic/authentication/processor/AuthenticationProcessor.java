@@ -1,8 +1,9 @@
-package com.logtoelastic.api.service;
+package com.logtoelastic.authentication.processor;
 
 import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
 import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationResult;
 
-public interface LoginService {
-    AuthenticationResult login(AuthenticationCredentials credentials) throws Exception;
+public interface AuthenticationProcessor {
+
+    AuthenticationResult authenticate(AuthenticationCredentials credentials);
 }

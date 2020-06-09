@@ -1,6 +1,7 @@
 package com.logtoelastic.sandbox.rabbitmq;
 
-import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
+
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.tools.jsonrpc.JsonRpcClient;
 
@@ -19,6 +20,6 @@ public class JsonRpcTestClient {
         var channel = connection.createChannel();
 //
         JsonRpcClient jsonRpcClient = new JsonRpcClient(channel, "", requestQueueName);
-        jsonRpcClient.call("", new Object[]{new AuthenticationRequest("", "")});
+        jsonRpcClient.call("", new Object[]{new AuthenticationCredentials("", "")});
     }
 }

@@ -1,6 +1,5 @@
 package com.logtoelastic.core.serviceregistry.services;
 
-import com.logtoelastic.core.serviceregistry.services.ServiceFactory;
 import io.nats.client.Connection;
 import io.nats.client.Nats;
 import io.nats.client.Options;

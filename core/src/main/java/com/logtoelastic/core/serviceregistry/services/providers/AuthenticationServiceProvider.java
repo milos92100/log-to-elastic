@@ -1,6 +1,6 @@
 package com.logtoelastic.core.serviceregistry.services.providers;
 
-import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
 import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationResult;
 
 import java.util.concurrent.Executor;
@@ -19,7 +19,7 @@ public interface AuthenticationServiceProvider {
      *
      * @param handler function for handling the request
      */
-    void onAuthenticate(Function<AuthenticationRequest, AuthenticationResult> handler);
+    void onAuthenticate(Function<AuthenticationCredentials, AuthenticationResult> handler);
 
     /**
      * Method is called when a authentication request is received.
@@ -28,5 +28,5 @@ public interface AuthenticationServiceProvider {
      * @param handler  function for handling the request
      * @param executor Executor for executing handler function
      */
-    void onAuthenticate(Function<AuthenticationRequest, AuthenticationResult> handler, Executor executor);
+    void onAuthenticate(Function<AuthenticationCredentials, AuthenticationResult> handler, Executor executor);
 }

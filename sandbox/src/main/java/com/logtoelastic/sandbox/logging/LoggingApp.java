@@ -14,9 +14,15 @@ public class LoggingApp {
     public static void main(String[] args) {
         ///System.out.println("Hello from com.logtoelastic.sandbox.logging");
 
-        ThreadContext.put("correlationId", UUID.randomUUID().toString());
-
-        logger.error("Hello {}", "World");
-
+        int i = 0;
+        while (i < 100) {
+            ThreadContext.put("correlationId", UUID.randomUUID().toString());
+            try {
+                throw new Exception("Some shit happened");
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+            i++;
+        }
     }
 }

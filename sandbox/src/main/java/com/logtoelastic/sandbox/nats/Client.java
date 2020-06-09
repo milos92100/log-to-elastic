@@ -1,7 +1,8 @@
 package com.logtoelastic.sandbox.nats;
 
 import com.logtoelastic.core.serviceregistry.Registry;
-import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
+
 import io.nats.client.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,10 +27,10 @@ public class Client {
         int i = 0;
         while (i < 50) {
             final int x = i;
-            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
-            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
-            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
-            new Thread(() -> authClient.authenticate(new AuthenticationRequest("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationCredentials("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationCredentials("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationCredentials("test-" + x, "test-" + x))).start();
+            new Thread(() -> authClient.authenticate(new AuthenticationCredentials("test-" + x, "test-" + x))).start();
             i++;
         }
 

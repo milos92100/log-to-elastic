@@ -1,4 +1,4 @@
-<Configuration status="WARN" packages="com.logtoelastic.api">
+<Configuration status="WARN" packages="com.logtoelastic.api,com.logtoelastic.library.logging">
     <Properties>
         <Property name="logPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%X{correlationId}] [%t] %-5level %logger{36} - %msg%n
         </Property>
@@ -20,30 +20,25 @@
 
         <RollingFile name="RollingFileJson" fileName="logs/app-alt.json"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
-
-            <JsonLayout complete="true">
-                <KeyValuePair key="additionalField1" value="constant value"/>
-                <KeyValuePair key="correlationId" value="$${ctx:correlationId}"/>
-            </JsonLayout>
-
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="1 MB"/>
             </Policies>
         </RollingFile>
 
-<!--        <MyAppender name="MyAppender"/>-->
+        <ElasticAppender name="ElasticAppender" host="localhost" port="9200"/>
 
-<!--        <Async name="Async">-->
-<!--            <AppenderRef ref="MyAppender"/>-->
-<!--        </Async>-->
+        <Async name="Async">
+            <AppenderRef ref="ElasticAppender"/>
+        </Async>
+
     </Appenders>
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="RollingFileJson"/>
-<!--            <AppenderRef ref="Async"/>-->
+            <AppenderRef ref="Async"/>
         </Root>
     </Loggers>
 </Configuration>

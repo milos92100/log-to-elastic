@@ -1,9 +1,11 @@
 package com.logtoelastic.api.controller;
 
+import com.logtoelastic.api.request.AuthenticationRequest;
 import com.logtoelastic.api.response.ApiError;
 import com.logtoelastic.api.response.ApiResponse;
 import com.logtoelastic.api.service.LoginService;
-import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationRequest;
+import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationCredentials;
+
 import com.logtoelastic.core.serviceregistry.dto.auhentication.AuthenticationResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,17 +19,17 @@ import java.util.List;
 
 @RestController
 public class AuthenticationController {
-    private static final Logger logger = LogManager.getLogger(GreetingController.class);
+    private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
 
     @Autowired
     private LoginService loginService;
 
     @PostMapping("/authentication")
-    public ApiResponse authenticate(@Valid @RequestBody com.logtoelastic.api.request.AuthenticationRequest request) {
+    public ApiResponse authenticate(@Valid @RequestBody AuthenticationRequest request) {
         try {
             logger.info("try login with user: {}, and pass: {}", request.getUsername(), request.getPassword());
             AuthenticationResult result = loginService.login(
-                    new AuthenticationRequest(request.getUsername(), request.getUsername())
+                    new AuthenticationCredentials(request.getUsername(), request.getUsername())
             );
 
             logger.info("login result {}", result);

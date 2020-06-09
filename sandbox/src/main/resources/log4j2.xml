@@ -1,4 +1,4 @@
-<Configuration status="WARN" packages="com.logtoelastic.sandbox.logging">
+<Configuration status="info" packages="com.logtoelastic.sandbox,com.logtoelastic.library.logging">
     <Properties>
         <Property name="logPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%X{correlationId}] [%t] %-5level %logger{36} -
             %msg%n

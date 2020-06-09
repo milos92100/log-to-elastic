@@ -32,11 +32,18 @@
             </Policies>
         </RollingFile>
 
+        <ElasticAppender name="ElasticAppender" host="localhost" port="9200"/>
+
+        <Async name="Async">
+            <AppenderRef ref="ElasticAppender"/>
+        </Async>
+
     </Appenders>
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="Async"/>
         </Root>
     </Loggers>
 </Configuration>
